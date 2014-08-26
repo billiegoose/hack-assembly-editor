@@ -1,29 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>ACE in Action</title>
-<style type="text/css" media="screen">
-    #editor { 
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
-</style>
+<title>Hack Assembly Editor</title>
+<link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
+<div id="page_title">Hack Assembly Editor</div>
 
-<div id="editor">function foo(items) {
-    var x = "All this is syntax highlighted";
-    return x;
-}</div>
+<div id="editors">
+<div id="hack_editor">
+
+
+
+
+
+
+0000000000000000
+1111110000010000
+0000000000000001
+1111010011010000
+0000000000001010
+1110001100000001
+0000000000000001
+1111110000010000
+0000000000001100
+1110101010000111
+
+0000000000000000
+1111110000010000
+
+0000000000000010
+1110001100001000
+
+0000000000001110
+1110101010000111
+
+
+
+
+
+
+
+
+
+
+</div>
+<div id="asm_editor">// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/06/max/Max.asm
+
+// Computes M[2] = max(M[0], M[1])  where M stands for RAM
+
+   @0
+   D=M              // D = first number
+   @1
+   D=D-M            // D = first number - second number
+   @OUTPUT_FIRST
+   D;JGT            // if D>0 (first is greater) goto output_first
+   @1
+   D=M              // D = second number
+   @OUTPUT_D
+   0;JMP            // goto output_d
+(OUTPUT_FIRST)
+   @0             
+   D=M              // D = first number
+(OUTPUT_D)
+   @2
+   M=D              // M[2] = D (greatest number)
+(INFINITE_LOOP)
+   @INFINITE_LOOP
+   0;JMP            // infinite loop
+
+
+
+
+
+
+
+
+
+
+</div>
+
+</div>
     
-<script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="./mode-asm.js" type="text/javascript" charset="utf-8"></script>
+<script src="./mode-hack.js" type="text/javascript" charset="utf-8"></script>
 <script>
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/javascript");
+    // Set editor 1 for Assembly editing
+    var asm_editor = ace.edit("asm_editor");
+    asm_editor.setTheme("ace/theme/monokai");
+    asm_editor.getSession().setMode("ace/mode/asm");
+    document.getElementById('asm_editor').style.fontSize = '12pt';
+
+    // Set editor 2 for Hack binary editing
+    var hack_editor = ace.edit("hack_editor");
+    hack_editor.setTheme("ace/theme/monokai");
+    hack_editor.getSession().setMode("ace/mode/hack");
+    document.getElementById('hack_editor').style.fontSize = '12pt';
+    hack_editor.renderer.setShowGutter(false); 
+
+    // Synchronize scrollbars - http://stackoverflow.com/a/14751893/2168416
+    var session1 = asm_editor.getSession();
+    var session2 = hack_editor.getSession();
+    session1.on('changeScrollTop',
+      function(scroll) {
+        session2.setScrollTop(parseInt(scroll) || 0)
+      }
+    );
+    // session1.on('changeScrollLeft',
+    //   function(scroll) {
+    //     session2.setScrollLeft(parseInt(scroll) || 0)
+    //   }
+    // );
+    session2.on('changeScrollTop',
+      function(scroll) {
+        session1.setScrollTop(parseInt(scroll) || 0)
+      }
+    );
+    // session2.on('changeScrollLeft',
+    //   function(scroll) {
+    //     session1.setScrollLeft(parseInt(scroll) || 0)
+    //   }
+    // );
 </script>
 </body>
 </html>

@@ -1,0 +1,29 @@
+@font-face {
+  font-family: "Let's go Digital Regular";
+  src: url("LetsGoDigitalRegular.ttf");
+}
+#page_title {
+  font-family: "Let's go Digital Regular";
+  font-size: 24pt;
+}
+#editors {
+  display: table-row;
+}
+#asm_editor {
+  width: 40em;
+  height: 550px;
+  display: table-cell;
+}
+#hack_editor {
+  width: 10em;
+  height: 550px;
+  display: table-cell;
+}
+/* Hacks to make the vertical scrollbar go away */
+#hack_editor .ace_scrollbar-v {
+  width: 0px;
+  display: none;
+}
+#hack_editor .ace_scroller {
+  right: 0px !important;
+}
