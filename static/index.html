@@ -125,6 +125,42 @@
     //     session1.setScrollLeft(parseInt(scroll) || 0)
     //   }
     // );
+
+    Tokenizer = require("ace/tokenizer").Tokenizer;
+    ASM = require('ace/mode/asm_highlight_rules');
+    asm_highlight_rules = new ASM.AsmHighlightRules;
+    tokenizer = new Tokenizer(asm_highlight_rules.$rules);
+
+    asm_editor.getSession().on('change', function(e) {
+        var row = e.data.range.start.row;
+        // console.log(row);
+        var line = asm_editor.getSession().getDocument().getLine(row);
+        // console.log(line);
+        var tokens = tokenizer.getLineTokens(line).tokens;
+        // console.log(tokens);
+        var obj = {type:null, dest:null, comp:null, jump:null, sym:null};
+
+        for (var i = 0; i < tokens.length; i++) {
+          var a = tokens[i];
+          if (a.type.search(/\bdest\b/)>-1) {
+            obj.dest = a.value;
+          } else if (a.type.search(/\bcomp\b/)>-1) {
+            obj.type = "C";
+            obj.comp = a.value;
+          } else if (a.type.search(/\bjump\b/)>-1) {
+            obj.jump = a.value;
+          } else if (a.type.search(/\baddress_op\b/)>-1) {
+            obj.type="A";
+          } else if (a.type.search(/\bsymbol\b/)>-1) {
+            obj.sym = a.value;
+            if (a.type.search(/\blabel\b/)>-1) {
+              obj.type="label";
+            }
+          }
+        };
+        console.log(obj);
+        // TODO: Next, integrate 'obj' with Backbone.js
+    });
 </script>
 </body>
 </html>
