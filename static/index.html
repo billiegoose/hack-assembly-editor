@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
 <title>Hack Assembly Editor</title>
-<link rel="stylesheet" type="text/css" href="index.css">
+<!--STYLES-->
+<link rel="stylesheet" type="text/css" href="./index.css">
 </head>
 <body>
-<div id="page_title">Hack Assembly Editor</div>
+<!--CONTENT-->
+<div class="page_title">Hack Assembly Editor</div>
 
-<div id="editors">
-<div id="hack_editor">
+<div class="editors">
+<div id="hack_editor" class="hack_editor">
 
 
 
@@ -45,7 +47,7 @@
 
 
 </div>
-<div id="asm_editor">// This file is part of www.nand2tetris.org
+<div id="asm_editor" class="asm_editor">// This file is part of www.nand2tetris.org
 // and the book "The Elements of Computing Systems"
 // by Nisan and Schocken, MIT Press.
 // File name: projects/06/max/Max.asm
@@ -84,83 +86,14 @@
 </div>
 
 </div>
-    
-<script src="/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+<!--SCRIPTS-->
+<script src="./lib/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/backbone-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/coffee-script.js" type="text/javascript" charset="utf-8"></script>
+
 <script src="./mode-asm.js" type="text/javascript" charset="utf-8"></script>
 <script src="./mode-hack.js" type="text/javascript" charset="utf-8"></script>
-<script>
-    // Set editor 1 for Assembly editing
-    var asm_editor = ace.edit("asm_editor");
-    asm_editor.setTheme("ace/theme/monokai");
-    asm_editor.getSession().setMode("ace/mode/asm");
-    document.getElementById('asm_editor').style.fontSize = '12pt';
-
-    // Set editor 2 for Hack binary editing
-    var hack_editor = ace.edit("hack_editor");
-    hack_editor.setTheme("ace/theme/monokai");
-    hack_editor.getSession().setMode("ace/mode/hack");
-    document.getElementById('hack_editor').style.fontSize = '12pt';
-    hack_editor.renderer.setShowGutter(false); 
-
-    // Synchronize scrollbars - http://stackoverflow.com/a/14751893/2168416
-    var session1 = asm_editor.getSession();
-    var session2 = hack_editor.getSession();
-    session1.on('changeScrollTop',
-      function(scroll) {
-        session2.setScrollTop(parseInt(scroll) || 0)
-      }
-    );
-    // session1.on('changeScrollLeft',
-    //   function(scroll) {
-    //     session2.setScrollLeft(parseInt(scroll) || 0)
-    //   }
-    // );
-    session2.on('changeScrollTop',
-      function(scroll) {
-        session1.setScrollTop(parseInt(scroll) || 0)
-      }
-    );
-    // session2.on('changeScrollLeft',
-    //   function(scroll) {
-    //     session1.setScrollLeft(parseInt(scroll) || 0)
-    //   }
-    // );
-
-    Tokenizer = require("ace/tokenizer").Tokenizer;
-    ASM = require('ace/mode/asm_highlight_rules');
-    asm_highlight_rules = new ASM.AsmHighlightRules;
-    tokenizer = new Tokenizer(asm_highlight_rules.$rules);
-
-    asm_editor.getSession().on('change', function(e) {
-        var row = e.data.range.start.row;
-        // console.log(row);
-        var line = asm_editor.getSession().getDocument().getLine(row);
-        // console.log(line);
-        var tokens = tokenizer.getLineTokens(line).tokens;
-        // console.log(tokens);
-        var obj = {type:null, dest:null, comp:null, jump:null, sym:null};
-
-        for (var i = 0; i < tokens.length; i++) {
-          var a = tokens[i];
-          if (a.type.search(/\bdest\b/)>-1) {
-            obj.dest = a.value;
-          } else if (a.type.search(/\bcomp\b/)>-1) {
-            obj.type = "C";
-            obj.comp = a.value;
-          } else if (a.type.search(/\bjump\b/)>-1) {
-            obj.jump = a.value;
-          } else if (a.type.search(/\baddress_op\b/)>-1) {
-            obj.type="A";
-          } else if (a.type.search(/\bsymbol\b/)>-1) {
-            obj.sym = a.value;
-            if (a.type.search(/\blabel\b/)>-1) {
-              obj.type="label";
-            }
-          }
-        };
-        console.log(obj);
-        // TODO: Next, integrate 'obj' with Backbone.js
-    });
-</script>
+<script src="./index.coffee" type="text/coffeescript" charset="utf-8"></script>
 </body>
 </html>
