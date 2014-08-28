@@ -23,6 +23,9 @@ init = () ->
     asm_session.setScrollTop parseInt(scroll) or 0
     return
 
+  # Show editors
+  document.getElementById("editors").style.visibility = "visible"
+
   # Setup Backbone model(s)
   Instruction = Backbone.Model.extend
     defaults: 

@@ -8,6 +8,7 @@
 }
 .editors {
   display: table-row;
+  visibility: hidden; /*Hide while loading.*/
 }
 .asm_editor {
   width: 40em;
