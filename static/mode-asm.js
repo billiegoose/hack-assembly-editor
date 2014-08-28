@@ -108,11 +108,11 @@ var AsmHighlightRules = function() {
         "C" : [
             {
                 token : "dest.entity.name.function",
-                regex : "(?:A||M|D|AM|AD|MD|AMD)(?==)",
+                regex : "(?:A|M|D|AM|AD|MD|AMD)(?==)",
                 next  : "comp"
             }, {
                 token : "error.keyword",
-                regex : ".+(?==)"
+                regex : "[^;/]+(?==)"
             }, {
                 token : "default",
                 regex : "(?=.)",
