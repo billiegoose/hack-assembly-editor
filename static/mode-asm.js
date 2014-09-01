@@ -1,4 +1,4 @@
-define('ace/mode/asm', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/mode/asm_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/asm', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/mode/asm_highlight_rules'], function(require, exports, module) {
 
 
 var oop = require("../lib/oop");
@@ -20,7 +20,7 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-define('ace/mode/asm_highlight_rules', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text'], function(require, exports, module) {
+ace.define('ace/mode/asm_highlight_rules', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text'], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
@@ -71,7 +71,7 @@ var AsmHighlightRules = function() {
                 token : "open.paren",
                 regex : "\\("
             }, {
-                token : "symbol.label",
+                token : "label.symbol",
                 regex : "[a-zA-Z0-9_\\.\\$\\:]+"
             }, {
                 token : "default",
@@ -95,6 +95,10 @@ var AsmHighlightRules = function() {
             {
                 token : "address_op.string",
                 regex : "@"
+            }, {
+                token : "literal.string",
+                regex : "[0-9]+",
+                next  : "end_of_line"
             }, {
                 token : "symbol.string",
                 regex : "[a-zA-Z0-9_\\.\\$\\:]+",

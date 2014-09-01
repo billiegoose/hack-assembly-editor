@@ -1,4 +1,4 @@
-define('ace/mode/hack', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/mode/hack_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/hack', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/mode/hack_highlight_rules'], function(require, exports, module) {
 
 
 var oop = require("../lib/oop");
@@ -20,7 +20,7 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-define('ace/mode/hack_highlight_rules', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text'], function(require, exports, module) {
+ace.define('ace/mode/hack_highlight_rules', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text'], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
@@ -33,6 +33,9 @@ var HackHighlightRules = function() {
     this.$rules = {
         "start" : [
             {
+                token : "line_num",
+                regex : ".*:\\s*"
+            }, {
                 token : "startbit.comment",
                 regex : "0",
                 next  : "A"

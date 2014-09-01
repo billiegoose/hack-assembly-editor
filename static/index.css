@@ -16,7 +16,7 @@
   display: table-cell;
 }
 .hack_editor {
-  width: 12em;
+  width: 15em;
   height: 550px;
   display: table-cell;
 }
@@ -27,4 +27,23 @@
 }
 .hack_editor .ace_scroller {
   right: 0px !important;
+}
+.symboltable {
+  /* Background and font colors copied from Monokai gutter. Seemed right. */
+  background-color: rgb(47, 49, 41);
+  color: rgb(143, 144, 138);
+  border-collapse: collapse;
+}
+table.symboltable {
+  width: 200px;
+  margin-left: 5px;
+}
+.symboltable td {
+  width: 50%;
+}
+.symboltable th {
+  color: white;
+  background-color: rgb(39, 39, 39);
+  /*border-left-color: rgb(39, 39, 39);
+  border-right-color: rgb(39, 39, 39);*/
 }
