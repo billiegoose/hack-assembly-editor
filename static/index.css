@@ -1,24 +1,38 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 @font-face {
   font-family: "Let's go Digital Regular";
   src: url("lib/LetsGoDigitalRegular.ttf");
 }
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 .page_title {
   font-family: "Let's go Digital Regular";
   font-size: 24pt;
+  /* Background and font colors copied from Monokai gutter. Seemed right. */
+  background-color: rgb(47, 49, 41);
+  color: rgb(143, 144, 138);
 }
 .editors {
-  display: table-row;
+  display: flex;
+  align-items: stretch;
   visibility: hidden; /*Hide while loading.*/
+  height: 100%;
+  width: 100%;
 }
 .asm_editor {
-  width: 40em;
-  height: 550px;
-  display: table-cell;
+  /*width: 40em;*/
+  flex-grow: 1;
 }
 .hack_editor {
   width: 15em;
-  height: 550px;
-  display: table-cell;
 }
 /* Hacks to make the vertical scrollbar go away */
 .hack_editor .ace_scrollbar-v {
@@ -34,9 +48,9 @@
   color: rgb(143, 144, 138);
   border-collapse: collapse;
 }
-table.symboltable {
+.symboltable table {
   width: 200px;
-  margin-left: 5px;
+  margin-left: 0px;
 }
 .symboltable td {
   width: 50%;

@@ -17,6 +17,7 @@ init = () ->
   hack_session.setMode "ace/mode/hack"
   document.getElementById("hack_editor").style.fontSize = "12pt"
   hack_editor.renderer.setShowGutter false
+  hack_editor.setReadOnly true
 
   # Synchronize scrollbars - http://stackoverflow.com/a/14751893/2168416
   asm_session.on "changeScrollTop", (scroll) ->
@@ -27,12 +28,17 @@ init = () ->
     asm_session.setScrollTop parseInt(scroll) or 0
     return
 
+  asm_editor.session.selection.on "changeCursor", (e) ->
+    hack_editor.gotoLine asm_editor.session.selection.getRange().start.row + 1, 0, false
+  # hack_editor.session.selection.on "changeCursor", (e) ->
+  #   asm_editor.gotoLine hack_editor.session.selection.getRange().start.row + 1, 0, false
+
   # Show editors
   document.getElementById("editors").style.visibility = "visible"
 
   # Setup Backbone model(s)
   Instruction = Backbone.Model.extend
-    defaults: 
+    defaults:
       line_num: null
       final_line_num: null
       type: null
@@ -65,7 +71,7 @@ init = () ->
         AD  : "110"
         AMD : "111"
 
-      jump2hack = 
+      jump2hack =
         null: "000"
         JGT : "001"
         JEQ : "010"
@@ -75,7 +81,7 @@ init = () ->
         JLE : "110"
         JMP : "111"
 
-      comp2hack = 
+      comp2hack =
         "0"  : "101010"
         "1"  : "111111"
         "-1" : "111010"
@@ -108,7 +114,7 @@ init = () ->
           else
             s = @.get("sym")
             if s?
-              symbol = symtable.findWhere({sym: s}) 
+              symbol = symtable.findWhere({sym: s})
               # If the code is working correctly, it will always be defined. But Just in Case...
               a = if not symbol? then "!!!!!!!!!!!!!!!" else pad15(symbol.get("address").toString(2))
             else
@@ -137,18 +143,18 @@ init = () ->
       # Create new rows
       for row in [start_row..start_row+num_lines-1]
         @add({line_num: row})
-      # Compute new final line number 
+      # Compute new final line number
       @computeFinalLineNumbers()
       return
     removeLines: (start_row, num_lines) ->
       console.log "Removing " + num_lines + " lines at " + start_row
       if num_lines == 0 then return
-      # Delete old rows      
+      # Delete old rows
       for row in [start_row...start_row+num_lines]
         @remove(@findWhere({line_num: row}))
       # Renumber remaining lines
       @renumber start_row, -num_lines
-      # Compute new final line number 
+      # Compute new final line number
       @computeFinalLineNumbers()
       return
     computeFinalLineNumbers: () ->
@@ -171,7 +177,7 @@ init = () ->
   window.code = new AsmFile
   window.asm_session = asm_session
 
-  SymbolRow = Backbone.Model.extend 
+  SymbolRow = Backbone.Model.extend
     defaults:
       sym: null
       address: null
@@ -204,7 +210,7 @@ init = () ->
         if symrow? then symrow.inc() else @add({sym: symname, ref_count: 1})
       dereference: (symname) ->
         symrow = @findWhere({sym: symname})
-        if symrow? 
+        if symrow?
           if symrow.get("ref_count") == 1
             console.log "DESTROY!"
             @remove(symrow)
@@ -232,7 +238,7 @@ init = () ->
   #         console.log "heyhy"
   #         console.log model
 
-  SymbolRowView = Backbone.View.extend 
+  SymbolRowView = Backbone.View.extend
     tagName: "tr"
     template: _.template("<td><div><%- sym %></div></td><td><%- address %></td><td><%- ref_count %></td><td><%- label_row %></td>")
     initialize: () ->
@@ -302,7 +308,7 @@ init = () ->
     row = model.get("line_num")
     text = code.renderHack(model, symtable)
     hackSetLine(row, text)
-    
+
   window.hack = () ->
     hack_session.setValue("")
     for model in code.models
@@ -316,7 +322,7 @@ init = () ->
 
   # Build initial code structure from ASM text
   for row in [0...asm_session.getLength()]
-    console.log row 
+    console.log row
     tokens = asm_session.getTokens(row)
     inst = new Instruction
     inst.set {line_num: row}
@@ -367,7 +373,7 @@ parseLine = (tokens, inst) ->
   # but also trigger appropriate changes for removed values
   # and also only triggers one change by setting it all at once.
 
-  o = 
+  o =
     type: null
     dest: null
     comp: null
